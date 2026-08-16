@@ -1,0 +1,34 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Publish linux-x64
+        run: dotnet publish Client/Client.csproj -c Release -r linux-x64 -o Build/linux-x64
+
+      - name: Publish win-x64
+        run: dotnet publish Client/Client.csproj -c Release -r win-x64 -o Build/win-x64
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" \
+            "Build/linux-x64/NugetFetcher#NugetFetcher (Linux x64)" \
+            "Build/win-x64/NugetFetcher.exe#NugetFetcher (Windows x64)" \
+            --repo "${{ github.repository }}" \
+            --clobber
