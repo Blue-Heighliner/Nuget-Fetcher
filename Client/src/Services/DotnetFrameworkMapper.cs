@@ -1,4 +1,4 @@
-namespace NugetFetcher.Services;
+namespace BlueHeighliner.NugetFetcher.Services;
 
 /// <summary>
 /// Maps a dotnet runtime version to the NuGet target framework packages should be resolved for.

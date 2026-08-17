@@ -1,4 +1,4 @@
-namespace NugetFetcher.Tests;
+namespace BlueHeighliner.NugetFetcher.Tests;
 
 public sealed class PackagePropsScannerTests : IDisposable
 {

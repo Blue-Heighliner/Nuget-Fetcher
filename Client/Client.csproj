@@ -6,6 +6,7 @@
     <ApplicationManifest>src\app.manifest</ApplicationManifest>
     <RuntimeIdentifiers>linux-x64;win-x64</RuntimeIdentifiers>
     <AssemblyName>NugetFetcher</AssemblyName>
+    <RootNamespace>BlueHeighliner.NugetFetcher</RootNamespace>
   </PropertyGroup>
 
   <!-- Single-file publish settings, applied only when a RuntimeIdentifier is specified (e.g. via `dotnet publish -r linux-x64`),

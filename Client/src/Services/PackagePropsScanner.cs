@@ -1,4 +1,4 @@
-namespace NugetFetcher.Services;
+namespace BlueHeighliner.NugetFetcher.Services;
 
 /// <summary>
 /// Scans <c>Directory.Packages.props</c> files (NuGet Central Package Management) for package

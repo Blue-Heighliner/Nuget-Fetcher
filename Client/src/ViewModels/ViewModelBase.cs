@@ -1,4 +1,4 @@
-namespace NugetFetcher.ViewModels;
+namespace BlueHeighliner.NugetFetcher.ViewModels;
 
 /// <summary>
 /// Base class for view models.

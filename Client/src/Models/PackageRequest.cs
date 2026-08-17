@@ -1,4 +1,4 @@
-namespace NugetFetcher.Models;
+namespace BlueHeighliner.NugetFetcher.Models;
 
 /// <summary>
 /// A single package identity requested for download, together with the file it was scanned from.

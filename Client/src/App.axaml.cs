@@ -1,4 +1,4 @@
-namespace NugetFetcher;
+namespace BlueHeighliner.NugetFetcher;
 
 /// <summary>
 /// The Avalonia application entry point.

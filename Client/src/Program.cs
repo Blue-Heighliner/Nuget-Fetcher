@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace NugetFetcher;
+namespace BlueHeighliner.NugetFetcher;
 
 sealed class Program
 {

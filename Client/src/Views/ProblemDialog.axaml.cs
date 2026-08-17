@@ -1,4 +1,4 @@
-namespace NugetFetcher.Views;
+namespace BlueHeighliner.NugetFetcher.Views;
 
 /// <summary>
 /// A modal popup used to report a problem to the user.

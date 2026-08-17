@@ -1,4 +1,4 @@
-namespace NugetFetcher.Services;
+namespace BlueHeighliner.NugetFetcher.Services;
 
 /// <summary>
 /// Extension methods for registering services by naming convention.

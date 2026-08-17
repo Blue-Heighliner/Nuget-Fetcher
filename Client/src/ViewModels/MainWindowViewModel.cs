@@ -1,4 +1,4 @@
-namespace NugetFetcher.ViewModels;
+namespace BlueHeighliner.NugetFetcher.ViewModels;
 
 /// <summary>
 /// View model backing the main window: collects packages scanned from <c>Directory.Packages.props</c>

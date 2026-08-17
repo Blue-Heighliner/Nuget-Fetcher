@@ -1,4 +1,4 @@
-namespace NugetFetcher.Views;
+namespace BlueHeighliner.NugetFetcher.Views;
 
 /// <summary>
 /// The application's main window.

@@ -1,4 +1,4 @@
-namespace NugetFetcher.Services;
+namespace BlueHeighliner.NugetFetcher.Services;
 
 /// <summary>
 /// Resolves the full dependency closure of a set of requested packages and downloads their
