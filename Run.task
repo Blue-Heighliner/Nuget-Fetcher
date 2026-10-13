@@ -1,3 +1,0 @@
-script
-	switch Client
-	run dotnet run

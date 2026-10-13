@@ -1,6 +1,0 @@
-script
-	folder Build
-	clean Build
-	switch Client
-	run dotnet publish Client.csproj -c Release -r linux-x64 -o ../Build/linux-x64
-	run dotnet publish Client.csproj -c Release -r win-x64 -o ../Build/win-x64
