@@ -48,6 +48,8 @@ internal sealed partial class MainWindow : Window
         }
     }
 
+    private void OnAddPackageClick(object? sender, RoutedEventArgs e) => ViewModel.AddPackage();
+
     private void OnClearClick(object? sender, RoutedEventArgs e) => ViewModel.ClearPackages();
 
     private async void OnDownloadClick(object? sender, RoutedEventArgs e)

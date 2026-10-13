@@ -27,7 +27,8 @@ Download the executable for your platform from the latest
 ## Usage
 
 1. Enter the target **Dotnet Runtime Version** (e.g. `10.0.5`).
-2. Click **Browse** and select one or more `Directory.Packages.props` files.
+2. Click **Browse** and select one or more `Directory.Packages.props` files, or enter a package id and
+   version and click **Add** to fetch that package together with all of its dependencies.
 3. Click **Download...** and choose an output `.zip` path.
 4. Any problems are reported in a popup once the operation finishes.
 

@@ -11,7 +11,7 @@
         Title="NugetFetcher"
         Width="700" Height="600">
 
-    <Grid RowDefinitions="Auto,*,Auto,Auto,Auto" Margin="12">
+    <Grid RowDefinitions="Auto,Auto,*,Auto,Auto,Auto" Margin="12">
         <Grid Grid.Row="0" ColumnDefinitions="Auto,150,Auto,Auto,*" Margin="0,0,0,12">
             <TextBlock Grid.Column="0" Text="Dotnet Runtime Version:" VerticalAlignment="Center" Margin="0,0,8,0" />
             <TextBox Grid.Column="1" Text="{Binding DotnetRuntimeVersion}" PlaceholderText="e.g. 10.0.5" />
@@ -19,7 +19,15 @@
             <Button Grid.Column="3" Content="Clear" Margin="8,0,0,0" Click="OnClearClick" IsEnabled="{Binding !IsBusy}" />
         </Grid>
 
-        <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1">
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto,150,Auto" Margin="0,0,0,12">
+            <TextBlock Grid.Column="0" Text="Package:" VerticalAlignment="Center" Margin="0,0,8,0" />
+            <TextBox Grid.Column="1" x:Name="NewPackageIdBox" Text="{Binding NewPackageId}" PlaceholderText="Package id" />
+            <TextBlock Grid.Column="2" Text="Version:" VerticalAlignment="Center" Margin="12,0,8,0" />
+            <TextBox Grid.Column="3" x:Name="NewPackageVersionBox" Text="{Binding NewPackageVersion}" PlaceholderText="e.g. 1.2.3" />
+            <Button Grid.Column="4" Content="Add" Margin="12,0,0,0" Click="OnAddPackageClick" IsEnabled="{Binding CanAddPackage}" />
+        </Grid>
+
+        <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="1">
             <DockPanel>
                 <Grid DockPanel.Dock="Top" ColumnDefinitions="150,1,*" Background="#22808080" Margin="4">
                     <TextBlock Grid.Column="0" Text="Version" FontWeight="Bold" TextAlignment="Right" Margin="0,0,8,0" />
@@ -45,10 +53,10 @@
             </DockPanel>
         </Border>
 
-        <TextBlock Grid.Row="2" Margin="0,12,0,0" Text="{Binding CurrentTask}" IsVisible="{Binding IsBusy}" TextTrimming="CharacterEllipsis" />
-        <ProgressBar Grid.Row="3" Margin="0,4,0,0" IsIndeterminate="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        <TextBlock Grid.Row="3" Margin="0,12,0,0" Text="{Binding CurrentTask}" IsVisible="{Binding IsBusy}" TextTrimming="CharacterEllipsis" />
+        <ProgressBar Grid.Row="4" Margin="0,4,0,0" IsIndeterminate="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 
-        <Button Grid.Row="4" Margin="0,12,0,0" Content="Download..." HorizontalAlignment="Stretch"
+        <Button Grid.Row="5" Margin="0,12,0,0" Content="Download..." HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center" Click="OnDownloadClick" IsEnabled="{Binding CanDownload}" />
     </Grid>
 

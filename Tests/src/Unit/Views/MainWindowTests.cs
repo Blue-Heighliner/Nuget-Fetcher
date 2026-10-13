@@ -45,4 +45,18 @@ public sealed class MainWindowTests
 
         Assert.True(download.IsEnabled);
     }
+
+    [AvaloniaFact]
+    public void AddButton_AddsEnteredPackage()
+    {
+        MainWindowViewModel viewModel = new(scanner.Object, downloader.Object);
+        MainWindow window = new() { DataContext = viewModel };
+        window.Show();
+        window.FindControl<TextBox>("NewPackageIdBox")!.Text = "Pkg.A";
+        window.FindControl<TextBox>("NewPackageVersionBox")!.Text = "1.0.0";
+
+        window.GetVisualDescendants().OfType<Button>().Single(b => Equals(b.Content, "Add")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("Pkg.A", Assert.Single(viewModel.Packages).Id);
+    }
 }

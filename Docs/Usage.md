@@ -15,6 +15,11 @@ The zip contains every listed package plus its transitive dependencies as `.nupk
 Click **Browse** repeatedly, or select several files at once. Packages are merged and deduplicated by
 id and version; click **Clear** to start over.
 
+## Fetch a single package with its dependencies
+
+Instead of browsing to a props file, enter a package id and version (e.g. `Newtonsoft.Json` and
+`13.0.3`) and click **Add**. The download includes that package plus every transitive dependency.
+
 ## Include implicit packages
 
 Packages not declared as a `PackageVersion` can be listed in a comment at the top of the props file:

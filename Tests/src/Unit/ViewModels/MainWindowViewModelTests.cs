@@ -197,4 +197,69 @@ public sealed class MainWindowViewModelTests
         viewModel.Packages.Add(new PackageRequest { Id = "Pkg.A", Version = "1.0.0", SourceFile = "f.props", IsImplicit = false });
         return viewModel;
     }
+
+    [Fact]
+    public void AddPackage_AddsEnteredPackageAndClearsInputs()
+    {
+        MainWindowViewModel viewModel = new(scanner.Object, downloader.Object) { NewPackageId = " Pkg.A ", NewPackageVersion = " 1.2.3 " };
+
+        viewModel.AddPackage();
+
+        PackageRequest package = Assert.Single(viewModel.Packages);
+        Assert.Equal("Pkg.A", package.Id);
+        Assert.Equal("1.2.3", package.Version);
+        Assert.False(package.IsImplicit);
+        Assert.Equal(string.Empty, viewModel.NewPackageId);
+        Assert.Equal(string.Empty, viewModel.NewPackageVersion);
+        Assert.False(viewModel.CanAddPackage);
+    }
+
+    [Fact]
+    public void AddPackage_SkipsDuplicateAndKeepsSorted()
+    {
+        MainWindowViewModel viewModel = CreateReady();
+
+        viewModel.NewPackageId = "pkg.a";
+        viewModel.NewPackageVersion = "1.0.0";
+        viewModel.AddPackage();
+        viewModel.NewPackageId = "Aaa";
+        viewModel.NewPackageVersion = "2.0.0";
+        viewModel.AddPackage();
+
+        Assert.Equal(["Aaa", "Pkg.A"], viewModel.Packages.Select(p => p.Id));
+    }
+
+    [Fact]
+    public void AddPackage_ReportsProblemForInvalidVersion()
+    {
+        MainWindowViewModel viewModel = new(scanner.Object, downloader.Object) { NewPackageId = "Pkg.A", NewPackageVersion = "nope" };
+        string? problem = null;
+        viewModel.ProblemReported += (_, message) => problem = message;
+
+        viewModel.AddPackage();
+
+        Assert.Equal("'nope' is not a valid package version.", problem);
+        Assert.Empty(viewModel.Packages);
+    }
+
+    [Theory]
+    [InlineData("", "1.0.0", false)]
+    [InlineData("Pkg.A", "", false)]
+    [InlineData("Pkg.A", "1.0.0", true)]
+    public void CanAddPackage_RequiresIdAndVersion(string id, string version, bool expected)
+    {
+        MainWindowViewModel viewModel = new(scanner.Object, downloader.Object) { NewPackageId = id, NewPackageVersion = version };
+
+        Assert.Equal(expected, viewModel.CanAddPackage);
+    }
+
+    [Fact]
+    public void AddPackage_DoesNothingWhenInputsMissing()
+    {
+        MainWindowViewModel viewModel = new(scanner.Object, downloader.Object);
+
+        viewModel.AddPackage();
+
+        Assert.Empty(viewModel.Packages);
+    }
 }

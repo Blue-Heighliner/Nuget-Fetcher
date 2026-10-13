@@ -16,6 +16,8 @@ internal sealed partial class MainWindowViewModel : ViewModelBase
         this.scanner = scanner;
         this.downloader = downloader;
         DotnetRuntimeVersion = string.Empty;
+        NewPackageId = string.Empty;
+        NewPackageVersion = string.Empty;
         CurrentTask = string.Empty;
         Packages.CollectionChanged += (_, _) => UpdateCanDownload();
     }
@@ -33,6 +35,25 @@ internal sealed partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     public partial string DotnetRuntimeVersion { get; set; }
+
+    /// <summary>
+    /// The id of a package being entered manually, to be added with <see cref="AddPackage"/>.
+    /// </summary>
+    [ObservableProperty]
+    public partial string NewPackageId { get; set; }
+
+    /// <summary>
+    /// The version of the package being entered manually, to be added with <see cref="AddPackage"/>.
+    /// </summary>
+    [ObservableProperty]
+    public partial string NewPackageVersion { get; set; }
+
+    /// <summary>
+    /// Whether a manually entered package can currently be added: both id and version are entered and no
+    /// download is in progress.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool CanAddPackage { get; set; }
 
     /// <summary>
     /// Whether a download is currently in progress.
@@ -81,17 +102,50 @@ internal sealed partial class MainWindowViewModel : ViewModelBase
 
         foreach (PackageRequest package in scanned)
         {
-            bool alreadyPresent = Packages.Any(existing =>
-                string.Equals(existing.Id, package.Id, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(existing.Version, package.Version, StringComparison.OrdinalIgnoreCase));
-
-            if (!alreadyPresent)
-            {
-                Packages.Add(package);
-            }
+            AddIfMissing(package);
         }
 
         SortPackages();
+    }
+
+    /// <summary>
+    /// Adds the manually entered <see cref="NewPackageId"/> and <see cref="NewPackageVersion"/> to
+    /// <see cref="Packages"/>, skipping it if already present. The download later gathers the package
+    /// together with its full dependency closure, same as any scanned package. An unparseable version is
+    /// reported as a problem instead.
+    /// </summary>
+    public void AddPackage()
+    {
+        if (!CanAddPackage)
+        {
+            return;
+        }
+
+        string id = NewPackageId.Trim();
+        string version = NewPackageVersion.Trim();
+
+        if (!NuGetVersion.TryParse(version, out _))
+        {
+            ProblemReported?.Invoke(this, $"'{version}' is not a valid package version.");
+            return;
+        }
+
+        AddIfMissing(new PackageRequest { Id = id, Version = version, SourceFile = "Manual entry", IsImplicit = false });
+        SortPackages();
+        NewPackageId = string.Empty;
+        NewPackageVersion = string.Empty;
+    }
+
+    private void AddIfMissing(PackageRequest package)
+    {
+        bool alreadyPresent = Packages.Any(existing =>
+            string.Equals(existing.Id, package.Id, StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(existing.Version, package.Version, StringComparison.OrdinalIgnoreCase));
+
+        if (!alreadyPresent)
+        {
+            Packages.Add(package);
+        }
     }
 
     /// <summary>
@@ -174,7 +228,17 @@ internal sealed partial class MainWindowViewModel : ViewModelBase
 
     partial void OnDotnetRuntimeVersionChanged(string value) => UpdateCanDownload();
 
-    partial void OnIsBusyChanged(bool value) => UpdateCanDownload();
+    partial void OnIsBusyChanged(bool value)
+    {
+        UpdateCanDownload();
+        UpdateCanAddPackage();
+    }
+
+    partial void OnNewPackageIdChanged(string value) => UpdateCanAddPackage();
+
+    partial void OnNewPackageVersionChanged(string value) => UpdateCanAddPackage();
+
+    private void UpdateCanAddPackage() => CanAddPackage = !IsBusy && !string.IsNullOrWhiteSpace(NewPackageId) && !string.IsNullOrWhiteSpace(NewPackageVersion);
 
     private void UpdateCanDownload() => CanDownload = !IsBusy && Packages.Count > 0 && !string.IsNullOrWhiteSpace(DotnetRuntimeVersion);
 

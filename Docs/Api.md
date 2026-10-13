@@ -15,7 +15,8 @@ holds no logic beyond file pickers and the problem popup.
 ## Flow
 
 1. The user enters the target runtime version and picks one or more props files.
-2. Each file is scanned; the results are merged into the package list, deduplicated by id and version
+2. Packages come from scanning files, or from a manually entered id and version (validated as a NuGet
+   version). Each file is scanned; the results are merged into the package list, deduplicated by id and version
    and kept sorted by id.
 3. When a runtime version and at least one package are present, the download action becomes available.
 4. Download resolves the dependency closure for the target framework derived from the runtime version,
